@@ -9,3 +9,6 @@ dry_test:
 
 gobuild:
 	cd scripts && ./gobuild.sh
+
+gotest:
+	go test -v -count 1 ./...

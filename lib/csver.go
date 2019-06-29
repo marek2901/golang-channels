@@ -46,6 +46,7 @@ type csvProcessor struct {
 func (cPrc csvProcessor) loadCsv(queue chan<- csvDataModel) (err error) {
 	csvFile, err := os.Open(cPrc.csvFilePath)
 	if err != nil {
+		close(queue)
 		return
 	}
 	reader := csv.NewReader(bufio.NewReader(csvFile))
