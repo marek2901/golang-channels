@@ -4,7 +4,7 @@ import (
 	"testing"
 )
 
-type dummyInsertStrategy struct{
+type dummyInsertStrategy struct {
 	customChecks func(csvRecord csvDataModel)
 }
 
@@ -21,7 +21,7 @@ func TestCsvProcessor_Process(t *testing.T) {
 		csvFilePath:    "../electricity-consumption-by-sectors.csv",
 	}
 
-	tearDown := func() { insertStrategy.customChecks = func(csvRecord csvDataModel) {}}
+	tearDown := func() { insertStrategy.customChecks = func(csvRecord csvDataModel) {} }
 
 	t.Run("it doesnt fail", func(t *testing.T) {
 		defer tearDown()
