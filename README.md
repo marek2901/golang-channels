@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/marek2901/golang-channels.svg?branch=master)](https://travis-ci.com/marek2901/golang-channels)
+
 # GO csv import fun
 > I was having some fun with sync.WaitGroup go feature.
 
