@@ -13,31 +13,28 @@ func (dIS dummyInsertStrategy) InsertData(csvRecord csvDataModel) {
 }
 
 func TestCsvProcessor_Process(t *testing.T) {
-	insertStrategy := dummyInsertStrategy{
-		customChecks: func(csvRecord csvDataModel) {},
-	}
-	processor := csvProcessor{
-		insertStrategy: insertStrategy,
-		csvFilePath:    "../electricity-consumption-by-sectors.csv",
+	createTestProcessor := func(customChecks func(csvRecord csvDataModel)) csvProcessor {
+		insertStrategy := dummyInsertStrategy{
+			customChecks: customChecks,
+		}
+		return csvProcessor{
+			insertStrategy: insertStrategy,
+			csvFilePath:    "../electricity-consumption-by-sectors.csv",
+		}
 	}
 
-	tearDown := func() { insertStrategy.customChecks = func(csvRecord csvDataModel) {} }
 
 	t.Run("it doesnt fail", func(t *testing.T) {
-		defer tearDown()
-		err := processor.Process()
+		err := createTestProcessor(func(csvRecord csvDataModel) {}).Process()
 		if err != nil {
 			t.Fail()
 		}
 	})
 
 	t.Run("it passes all structs properly", func(t *testing.T) {
-		defer tearDown()
-		err := processor.Process()
-		if err != nil {
-			t.Fail()
-		}
-		insertStrategy.customChecks = func(csvRecord csvDataModel) {
+		runCount := 0
+		processor := createTestProcessor(func(csvRecord csvDataModel) {
+			runCount++
 			if len(csvRecord.Consumption) == 0 {
 				t.Fail()
 			}
@@ -50,6 +47,13 @@ func TestCsvProcessor_Process(t *testing.T) {
 			if len(csvRecord.Year) == 0 {
 				t.Fail()
 			}
+		})
+		err := processor.Process()
+		if err != nil {
+			t.Fail()
+		}
+		if runCount == 0 {
+			t.Fail()
 		}
 	})
 }
