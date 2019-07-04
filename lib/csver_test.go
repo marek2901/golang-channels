@@ -1,6 +1,7 @@
 package channelsfunn
 
 import (
+	"sync/atomic"
 	"testing"
 )
 
@@ -31,9 +32,9 @@ func TestCsvProcessor_Process(t *testing.T) {
 	})
 
 	t.Run("it passes all structs properly", func(t *testing.T) {
-		runCount := 0
+		var runCount uint64
 		processor := createTestProcessor(func(csvRecord csvDataModel) {
-			runCount++
+			atomic.AddUint64(&runCount, 1)
 			if len(csvRecord.Consumption) == 0 {
 				t.Fail()
 			}
@@ -51,7 +52,7 @@ func TestCsvProcessor_Process(t *testing.T) {
 		if err != nil {
 			t.Fail()
 		}
-		if runCount == 0 {
+		if atomic.LoadUint64(&runCount) != 375 {
 			t.Fail()
 		}
 	})
