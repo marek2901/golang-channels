@@ -23,7 +23,6 @@ func TestCsvProcessor_Process(t *testing.T) {
 		}
 	}
 
-
 	t.Run("it doesnt fail", func(t *testing.T) {
 		err := createTestProcessor(func(csvRecord csvDataModel) {}).Process()
 		if err != nil {
