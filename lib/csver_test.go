@@ -31,7 +31,7 @@ func TestCsvProcessor_Process(t *testing.T) {
 		}
 	})
 
-	t.Run("it pass all structs properly", func(t *testing.T) {
+	t.Run("it passes all structs properly", func(t *testing.T) {
 		defer tearDown()
 		err := processor.Process()
 		if err != nil {
